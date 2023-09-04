@@ -159,9 +159,11 @@ def train_model(model, optimizer, train_loader, model_func, lr_scheduler, optim_
             else:
                 cur_scheduler = lr_scheduler
 
+            # @: BN_EMA_DECAY: False, 是否让 BN 的动量值随 epoch 数逐步减小
             if ema_model and ema_model.model_cfg.get('BN_EMA_DECAY', False):
                 max_bn_ema = ema_model.model_cfg.BN_EMA
                 min_bn_ema = ema_model.model_cfg.MIN_BN_EMA
+                # 从 1 按 cos 曲线降到 0 的系数
                 multiplier = (np.cos(cur_epoch/total_epochs*np.pi) + 1) * 0.5
                 cur_bn_ema = min_bn_ema + multiplier * (max_bn_ema - min_bn_ema)
                 model.module.set_momemtum_value_for_bn(momemtum=(1-cur_bn_ema))

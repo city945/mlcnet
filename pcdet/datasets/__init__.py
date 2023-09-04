@@ -114,6 +114,7 @@ def build_dataloader_mt(dataset_cfg, dataset_cfg_target, class_names, class_name
         logger=logger,
     )
 
+    # @? 始终取第一个数据
     sample = dataset_target[0]
 
     if merge_all_iters_to_one_epoch:

@@ -64,6 +64,7 @@ class PointRCNNMeanTeacherMerge(Detector3DTemplate):
         else:
             assert isinstance(batch_dict, list)
             assert len(batch_dict) == 2
+            # batch_merge 为源域数据与学生模型目标域数据(两次增强)，batch_target2 为通过教师模型结果
             batch_merge, batch_target2 = batch_dict
 
             # forward source and target together

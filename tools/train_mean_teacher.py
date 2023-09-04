@@ -120,11 +120,13 @@ def main():
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=train_set)
     ema_model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=train_set)
 
+    # @: BN_WARM_UP: False, 不使用；使用该策略则使用较小的动量参数初始化 BN 层
     if ema_model.model_cfg.get('BN_WARM_UP', False):
         model.set_momemtum_value_for_bn(momemtum=0.1)
     else:
         model.set_momemtum_value_for_bn(momemtum=(1-model.model_cfg.get('BN_EMA', 0.9)))
 
+    # ema 教师网络的参数分离，不计算梯度
     for param in ema_model.parameters():
         param.detach_()
 
@@ -159,6 +161,7 @@ def main():
             last_epoch = start_epoch + 1
 
     model.train()  # before wrap to DistributedDataParallel to support fixed some parameters
+    # @: COPY_BN_STATS_TO_TEACHER: True, 将学生模型的 BN 参数拷贝到教师模型，则教师模型在训练过程中没有要训练的参数，启用 eval 模式
     if ema_model.model_cfg.get('COPY_BN_STATS_TO_TEACHER', False):
         ema_model.eval()
     else:
@@ -173,6 +176,7 @@ def main():
         last_epoch=last_epoch, optim_cfg=cfg.OPTIMIZATION
     )
 
+    # @: MERGE_SOURCE_TARGET: True, 三个函数没有本质区别，model_fn_decorator_for_mt 最直观
     if ema_model.model_cfg.get('MERGE_SOURCE_TARGET', False):
         model_function = model_fn_decorator_for_mt_merge_source_target
     elif ema_model.model_cfg.get('MERGE_SOURCE_TARGET_FOR_BOTH', False):

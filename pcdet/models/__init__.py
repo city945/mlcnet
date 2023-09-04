@@ -52,6 +52,9 @@ def model_fn_decorator():
 
 
 def model_fn_decorator_for_mt():
+    # 三个函数没有本质区别，model_fn_decorator_for_mt 最直观
+    # batch_dict 包含一个源域数据 s1，两个不同数据增强强度的目标域数据 t1 t2，t2 经过教师模型的结果与 s1 t1 经学生模型计算损失
+    # @? 强增强的给教师模型
     ModelReturn = namedtuple('ModelReturn', ['loss', 'tb_dict', 'disp_dict'])
 
     def model_func(model, batch_dict, ema_model=None, cur_epoch=None):
@@ -84,6 +87,7 @@ def model_fn_decorator_for_mt():
     return model_func
 
 def model_fn_decorator_for_mt_merge_source_target():
+    # batch_dict 包括一个源域数据 s1，两个目标域数据 t1 t2，s1 t1 合并成 batch_merge，再同理计算
     ModelReturn = namedtuple('ModelReturn', ['loss', 'tb_dict', 'disp_dict'])
 
     def model_func(model, batch_dict, ema_model=None, cur_epoch=None):
@@ -116,6 +120,7 @@ def model_fn_decorator_for_mt_merge_source_target():
     return model_func
 
 def model_fn_decorator_for_mt_merge_both_models():
+    # batch_dict 包括两个源域数据 s1 s2，两个目标域数据 t1 t2，分别合并为 batch_student batch_teacher，再同理计算
     ModelReturn = namedtuple('ModelReturn', ['loss', 'tb_dict', 'disp_dict'])
 
     def model_func(model, batch_dict, ema_model=None, cur_epoch=None):
