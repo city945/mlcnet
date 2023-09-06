@@ -62,6 +62,7 @@ class PointNet2MSG(nn.Module):
                 points: (num_points, 4 + C), [batch_idx, x, y, z, ...]
         Returns:
             batch_dict:
+                bottom_features: MSG 多尺度特征拼接，这里的最后一层 SA 输出是最大尺度的特征
                 encoded_spconv_tensor: sparse tensor
                 point_features: (N, C)
         """
@@ -72,6 +73,7 @@ class PointNet2MSG(nn.Module):
         xyz_batch_cnt = xyz.new_zeros(batch_size).int()
         for bs_idx in range(batch_size):
             xyz_batch_cnt[bs_idx] = (batch_idx == bs_idx).sum()
+        # xyz_batch_cnt: (batch_size)[第i个点云的点数], 一维数组
 
         # import pdb; pdb.set_trace()
         assert xyz_batch_cnt.min() == xyz_batch_cnt.max()

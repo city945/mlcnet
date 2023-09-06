@@ -72,6 +72,7 @@ class PointRCNNMeanTeacherMerge(Detector3DTemplate):
                 if cur_module.__class__.__name__ not in ['PointRCNNHeadMT', 'PointRCNNHeadMTMerge']:
                     batch_merge = cur_module(batch_merge)
                 else:
+                    # @: WARM_UP_EPOCH: 1, 怎么还需要一轮热身
                     is_warm_up = self.model_cfg.WARM_UP_EPOCH > cur_epoch
                     if is_warm_up:
                         batch_merge = cur_module(batch_merge)
