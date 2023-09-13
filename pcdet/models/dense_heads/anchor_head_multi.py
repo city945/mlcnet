@@ -5,7 +5,6 @@ import torch.nn as nn
 from ..backbones_2d import BaseBEVBackbone
 from .anchor_head_template import AnchorHeadTemplate
 
-
 class SingleHead(BaseBEVBackbone):
     def __init__(self, model_cfg, input_channels, num_class, num_anchors_per_location, code_size, rpn_head_cfg=None,
                  head_label_indices=None, separate_reg_config=None):
@@ -150,7 +149,7 @@ class SingleHead(BaseBEVBackbone):
 
 class AnchorHeadMulti(AnchorHeadTemplate):
     def __init__(self, model_cfg, input_channels, num_class, class_names, grid_size, point_cloud_range,
-                 predict_boxes_when_training=True):
+                 predict_boxes_when_training=True, **kwargs):
         super().__init__(
             model_cfg=model_cfg, num_class=num_class, class_names=class_names, grid_size=grid_size,
             point_cloud_range=point_cloud_range, predict_boxes_when_training=predict_boxes_when_training
