@@ -1,0 +1,26 @@
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+      // 数据集预处理
+      // python -m pcdet.datasets.kitti.kitti_dataset create_kitti_infos tools/cfgs/dataset_configs/kitti_dataset.yaml
+      // python -m pcdet.datasets.nuscenes.nuscenes_dataset --func create_nuscenes_infos --cfg_file tools/cfgs/dataset_configs/nuscenes_dataset.yaml --version v1.0-trainval
+      // python -m pcdet.datasets.waymo.waymo_dataset --func create_waymo_infos --cfg_file tools/cfgs/dataset_configs/waymo_dataset.yaml 
+      // ---------------------------------------- mlcnet ----------------------------------------
+      // python train_mean_teacher.py cfgs/kitti_models/pointrcnn_mean_teacher_waymo.yaml
+      {
+        "name": "train_kitti_waymo_mlcnet_pointrcnn_iou",
+        "type": "python",
+        "request": "launch",
+        "program": "train_mean_teacher.py",
+        "justMyCode": true,
+        "cwd": "${workspaceFolder}/tools",
+        "args": [
+          "--cfg_file", "cfgs/kitti_models/pointrcnn_mean_teacher_waymo.yaml"
+        ]
+      },
+      // python test.py --cfg_file cfgs/waymo_models/pointrcnn_kitti2waymo.yaml
+  ]
+}
